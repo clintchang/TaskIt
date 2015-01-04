@@ -29,11 +29,18 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="wAL-pi-QMx"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="lB9-SY-j3o"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="7dF-pO-2Cb"/>
+                    <connections>
+                        <outlet property="tableView" destination="5Fe-Fm-eYx" id="VK3-SH-b6q"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

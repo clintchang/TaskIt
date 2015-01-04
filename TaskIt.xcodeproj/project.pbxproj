@@ -13,6 +13,7 @@
 		F48CC4381A5910A200B6F5AE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F48CC4371A5910A200B6F5AE /* Images.xcassets */; };
 		F48CC43B1A5910A200B6F5AE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F48CC4391A5910A200B6F5AE /* LaunchScreen.xib */; };
 		F48CC4471A5910A200B6F5AE /* TaskItTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48CC4461A5910A200B6F5AE /* TaskItTests.swift */; };
+		F48EA9B91A599CEC00619DA5 /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48EA9B81A599CEC00619DA5 /* TaskCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		F48CC4401A5910A200B6F5AE /* TaskItTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskItTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F48CC4451A5910A200B6F5AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F48CC4461A5910A200B6F5AE /* TaskItTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItTests.swift; sourceTree = "<group>"; };
+		F48EA9B81A599CEC00619DA5 /* TaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TaskCell.swift; path = ../TaskCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		F48CC42D1A5910A200B6F5AE /* TaskIt */ = {
 			isa = PBXGroup;
 			children = (
+				F48EA9B81A599CEC00619DA5 /* TaskCell.swift */,
 				F48CC4301A5910A200B6F5AE /* AppDelegate.swift */,
 				F48CC4321A5910A200B6F5AE /* ViewController.swift */,
 				F48CC4341A5910A200B6F5AE /* Main.storyboard */,
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F48CC4331A5910A200B6F5AE /* ViewController.swift in Sources */,
+				F48EA9B91A599CEC00619DA5 /* TaskCell.swift in Sources */,
 				F48CC4311A5910A200B6F5AE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,6 +411,7 @@
 				F48CC44C1A5910A200B6F5AE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F48CC44D1A5910A200B6F5AE /* Build configuration list for PBXNativeTarget "TaskItTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +420,7 @@
 				F48CC44F1A5910A200B6F5AE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
