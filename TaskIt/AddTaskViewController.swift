@@ -1,34 +1,25 @@
 //
-//  TaskDetailViewController.swift
+//  AddTaskViewController.swift
 //  TaskIt
 //
-//  Created by Clint on 1/6/15.
+//  Created by Clint on 1/9/15.
 //  Copyright (c) 2015 Republic. All rights reserved.
 //
 
 import UIKit
 
-class TaskDetailViewController: UIViewController {
+class AddTaskViewController: UIViewController {
+    
+    var mainVC: ViewController!
 
     @IBOutlet weak var taskTextField: UITextField!
-    
     @IBOutlet weak var subtaskTextField: UITextField!
-    
     @IBOutlet weak var dueDatePicker: UIDatePicker!
-    
-    var detailTaskModel: TaskModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        println(self.detailTaskModel.task)
-        
-        self.taskTextField.text = detailTaskModel.task
-        self.subtaskTextField.text = detailTaskModel.subTask
-        self.dueDatePicker.date = detailTaskModel.date
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,12 +28,10 @@ class TaskDetailViewController: UIViewController {
     }
     
 
-    @IBAction func cancelButtonTapped(sender: UIBarButtonItem) {
+    @IBAction func cancelButtonTapped(sender: UIButton) {
         
-        self.navigationController?.popViewControllerAnimated(true)
+        self.dismissViewControllerAnimated(true, completion: nil)
         
     }
-    
-    
     
 }
