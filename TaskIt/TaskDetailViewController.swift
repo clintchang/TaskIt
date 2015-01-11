@@ -46,8 +46,8 @@ class TaskDetailViewController: UIViewController {
     @IBAction func doneBarButtonItemPressed(sender: UIBarButtonItem) {
         
         //we're going to update the task with our changes
-        var task = TaskModel(task: taskTextField.text, subTask: subtaskTextField.text, date: dueDatePicker.date)
-        mainVC.taskArray[mainVC.tableView.indexPathForSelectedRow()!.row] = task
+        var task = TaskModel(task: taskTextField.text, subTask: subtaskTextField.text, date: dueDatePicker.date, completed: false)
+        mainVC.baseArray[0][mainVC.tableView.indexPathForSelectedRow()!.row] = task
         
         self.navigationController?.popViewControllerAnimated(true)
         
