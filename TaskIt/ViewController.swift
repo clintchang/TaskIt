@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate, TaskDetailViewControllerDelegate, AddTaskViewControllerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
-
-    var baseArray:[[TaskModel]] = []
-    
+    //need to set up our fetchedresults controller to manage adding and saving. we did this in the addtaskviewcontroller
+    let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext!
+    //optimized way to manage edits to table
+    var fetchedResultsController:NSFetchedResultsController = NSFetchedResultsController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,26 +25,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         // Do any additional setup after loading the view, typically from a nib.
         
-        let date1 = Date.from(year: 2014, month: 05, day: 20)
-        let date2 = Date.from(year: 2014, month: 03, day: 04)
-        let date3 = Date.from(year: 2014, month: 12, day: 13)
-        
-        
-        let task1 = TaskModel(task: "Study French", subTask: "Verbs", date: date1, completed: false)
-        let task2 = TaskModel(task: "Eat Dinner", subTask: "Burgers", date: date2, completed: false)
-        let task3 = TaskModel(task: "Gym", subTask: "Leg Day", date: date3, completed: false)
-        
-        let taskArray = [task1, task2, task3]
-        var completedArray = [TaskModel(task: "Code", subTask: "Task Project", date: date2, completed: true)]
-        
-        baseArray = [taskArray, completedArray]
-        
-        
-        
-        self.tableView.reloadData()
-        
-//        println(task1["task"])
-//        println(task1["date"])
+        //fetch the sorted results
+        fetchedResultsController = getFetchedResultsController()
+        fetchedResultsController.delegate = self
+        fetchedResultsController.performFetch(nil)
     }
     
     //this function is called every time we go back to this view controller
@@ -53,13 +40,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //        }
 //        taskArray = taskArray.sorted(sortByDate)
         
-        baseArray[0] = baseArray[0].sorted {
-            (taskOne:TaskModel, taskTwo: TaskModel) -> Bool in
-            //comparison logic here
-            return taskOne.date.timeIntervalSince1970 < taskTwo.date.timeIntervalSince1970
-        }
-        
-        self.tableView.reloadData()
+//        baseArray[0] = baseArray[0].sorted {
+//            (taskOne:TaskModel, taskTwo: TaskModel) -> Bool in
+//            //comparison logic here
+//            return taskOne.date.timeIntervalSince1970 < taskTwo.date.timeIntervalSince1970
+//        }
+//        
+//        self.tableView.reloadData()
+    
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -72,15 +61,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if segue.identifier == "showTaskDetail" {
             let detailVC: TaskDetailViewController = segue.destinationViewController as TaskDetailViewController
             let indexPath = self.tableView.indexPathForSelectedRow()
-            let thisTask = baseArray[indexPath!.section][indexPath!.row]
+            let thisTask = fetchedResultsController.objectAtIndexPath(indexPath!) as TaskModel
             detailVC.detailTaskModel = thisTask
-            detailVC.mainVC = self
+            detailVC.delegate = self
+            
         } else if segue.identifier == "showTaskAdd" {
             let addTaskVC:AddTaskViewController = segue.destinationViewController as AddTaskViewController
-            addTaskVC.mainVC = self
+            addTaskVC.delegate = self
             
         }
-        
+         
     
     }
     
@@ -94,25 +84,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //UITableViewDataSource
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return baseArray.count
+        return fetchedResultsController.sections!.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return baseArray[section].count
+        return fetchedResultsController.sections![section].numberOfObjects
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        println(indexPath.row)
+        //println(indexPath.row)
         
-        let thisTask = baseArray[indexPath.section][indexPath.row]
+        let thisTask = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
         
         
         var cell: TaskCell = tableView.dequeueReusableCellWithIdentifier("myCell") as TaskCell
         
         cell.taskLabel.text = thisTask.task
-        cell.descriptionLabel.text = thisTask.subTask
+        cell.descriptionLabel.text = thisTask.subtask
         cell.dateLabel.text = Date.toString(date: thisTask.date)
         
         return cell
@@ -121,7 +111,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        println(indexPath.row)
+        //println(indexPath.row)
         performSegueWithIdentifier("showTaskDetail", sender: self)
         
         
@@ -139,33 +129,71 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
+    //this allows for swiping left/right to complete
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        let thisTask = baseArray[indexPath.section][indexPath.row]
+        let thisTask = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
         
         if indexPath.section == 0 {
-            var newTask = TaskModel(task: thisTask.task, subTask: thisTask.subTask, date: thisTask.date, completed: true)
-            baseArray[1].append(newTask)
+            thisTask.completed = true
         } else {
-            var newTask = TaskModel(task: thisTask.task, subTask: thisTask.subTask, date: thisTask.date, completed: false)
-            baseArray[0].append(newTask)
+            thisTask.completed = false
         }
         
-        baseArray[indexPath.section].removeAtIndex(indexPath.row)
-        tableView.reloadData()
-        
-        
-        
-        
+        (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
         
     }
     
+    //NSFetchedResultsControllerDelegate
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.reloadData()
+    }
     
     //Helpers
+    func taskFetchRequest() -> NSFetchRequest {
+        //fetch and sort our tasks by date
+        let fetchRequest = NSFetchRequest(entityName: "TaskModel")
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        let completedDescriptor = NSSortDescriptor(key: "completed", ascending: true)
+        fetchRequest.sortDescriptors = [completedDescriptor, sortDescriptor]
+       
+        return fetchRequest
+    }
+    
+    
+    func getFetchedResultsController() -> NSFetchedResultsController {
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: managedObjectContext, sectionNameKeyPath: "completed", cacheName: nil)
+        return fetchedResultsController
+        
+    }
+    
+    //TaskDetailViewControllerDelegate
+    
+    func taskDetailEdited() {
+//        println("taskdetailedited")
+        showAlert()
+    }
     
     
     
     
+    func showAlert(message:String = "Congratulations"){
+        var alert = UIAlertController (title: "Change Made", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok!", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
+    //AddTaskViewControllerDelegate
+    func addTaskCanceled(message: String) {
+        showAlert(message: message)
+    }
+    
+    func addTask(message: String) {
+        showAlert(message: message)
+    }
     
 }
 
