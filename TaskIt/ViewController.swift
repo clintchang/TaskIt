@@ -29,6 +29,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         fetchedResultsController = getFetchedResultsController()
         fetchedResultsController.delegate = self
         fetchedResultsController.performFetch(nil)
+        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
+        
     }
     
     //this function is called every time we go back to this view controller
@@ -128,6 +131,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return "Completed"
         }
     }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+    }
+    
     
     //this allows for swiping left/right to complete
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

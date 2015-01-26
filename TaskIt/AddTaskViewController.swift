@@ -91,6 +91,7 @@ class AddTaskViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
     }
 
     override func didReceiveMemoryWarning() {

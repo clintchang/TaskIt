@@ -42,6 +42,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.navigationItem.leftBarButtonItem = doneButton
         
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
         
         
     }

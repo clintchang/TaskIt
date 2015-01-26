@@ -34,6 +34,8 @@ class TaskDetailViewController: UIViewController {
         self.subtaskTextField.text = detailTaskModel.subtask
         self.dueDatePicker.date = detailTaskModel.date
         
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
+        
         
     }
 
