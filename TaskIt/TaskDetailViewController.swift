@@ -56,13 +56,16 @@ class TaskDetailViewController: UIViewController {
         
         //we're going to update the task with our changes
         
-        let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
+//        let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
+        
+        
         detailTaskModel.task = taskTextField.text
         detailTaskModel.subtask = subtaskTextField.text
         detailTaskModel.date = dueDatePicker.date
         detailTaskModel.completed = detailTaskModel.completed
         
-        appDelegate.saveContext()
+        //appDelegate.saveContext()
+        ModelManager.instance.saveContext()
         
         self.navigationController?.popViewControllerAnimated(true)
         delegate?.taskDetailEdited!()

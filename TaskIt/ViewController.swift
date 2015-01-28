@@ -15,7 +15,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var tableView: UITableView!
     
     //need to set up our fetchedresults controller to manage adding and saving. we did this in the addtaskviewcontroller
-    let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext!
+    //let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext!
+    
     //optimized way to manage edits to table
     var fetchedResultsController:NSFetchedResultsController = NSFetchedResultsController()
     
@@ -31,6 +32,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         fetchedResultsController.performFetch(nil)
         
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Background")!)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("iCloudUpdated"), name: "coreDataUpdated", object: nil)
+        
         
     }
     
@@ -148,7 +152,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             thisTask.completed = false
         }
         
-        (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
+        //(UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
+        ModelManager.instance.saveContext()
+        
         
     }
     
@@ -172,7 +178,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func getFetchedResultsController() -> NSFetchedResultsController {
         
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: managedObjectContext, sectionNameKeyPath: "completed", cacheName: nil)
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: ModelManager.instance.managedObjectContext!, sectionNameKeyPath: "completed", cacheName: nil)
         return fetchedResultsController
         
     }
@@ -201,6 +207,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func addTask(message: String) {
         showAlert(message: message)
+    }
+    
+    
+    //iCloud notification
+    
+    func iCloudUpdated() {
+        
+        tableView.reloadData()
+        
     }
     
 }

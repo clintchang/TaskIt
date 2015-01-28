@@ -36,7 +36,8 @@ class AddTaskViewController: UIViewController {
         let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
         
         //access managedObjectContext. managedObjectContext is an optional...
-        let managedObjectContext = appDelegate.managedObjectContext
+        //let managedObjectContext = appDelegate.managedObjectContext
+        let managedObjectContext = ModelManager.instance.managedObjectContext
         
         //pull out our taskmodel entity, which is an optional
         let entityDescription = NSEntityDescription.entityForName("TaskModel", inManagedObjectContext: managedObjectContext!)
@@ -66,7 +67,8 @@ class AddTaskViewController: UIViewController {
         
         
         //this is the command to save things
-        appDelegate.saveContext()
+        //appDelegate.saveContext()
+        ModelManager.instance.saveContext()
         
         //how do we get all the taskmodel instances into an array?
         //request all instances of taskmodel
